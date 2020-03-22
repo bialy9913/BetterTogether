@@ -1,6 +1,7 @@
 package com.example.bettertogether.utils
 
 import android.content.Context
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.navigation.NavController
@@ -8,6 +9,14 @@ import androidx.navigation.NavOptions
 
 fun Context.showToast(text: String) {
     Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+}
+
+fun ProgressBar.show(){
+    ProgressBar.VISIBLE
+}
+
+fun ProgressBar.hide(){
+    ProgressBar.INVISIBLE
 }
 
 fun NavController.navigateWithoutComingBack(@IdRes resIdSource: Int, @IdRes resIdDestination: Int) {

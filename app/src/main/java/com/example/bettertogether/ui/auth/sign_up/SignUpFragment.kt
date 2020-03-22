@@ -1,4 +1,4 @@
-package com.example.bettertogether.ui.auth
+package com.example.bettertogether.ui.auth.sign_up
 
 
 import android.os.Bundle
@@ -6,13 +6,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
+import androidx.navigation.fragment.NavHostFragment
 import com.example.bettertogether.R
+import com.example.bettertogether.ui.base.BaseFragment
+import com.example.bettertogether.utils.hide
 import com.example.bettertogether.utils.navigateWithoutComingBack
 import com.example.bettertogether.utils.showToast
 import kotlinx.android.synthetic.main.fragment_sign_up.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class SignUpFragment : AuthStateAbstractClass(), View.OnClickListener {
+class SignUpFragment : BaseFragment(),SignUpNavigator {
+
+    private val signUpViewModel: SignUpViewModel by viewModel()
+    private val navController by lazy { NavHostFragment.findNavController(this) }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        signUpViewModel.setNavigator(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,34 +35,25 @@ class SignUpFragment : AuthStateAbstractClass(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        signUpBtn.setOnClickListener(this)
         validateFields()
-
+        setOnClickListeners()
     }
-    override fun onStarted() {
-        progressBar.visibility=View.VISIBLE
-    }
-
-    override fun onSuccess() {
-        progressBar.visibility=View.GONE
-        navController.navigateWithoutComingBack(R.id.signUpFragment,R.id.signInFragment)
-        showToast("Signing up success. Now you can Log in")
+    override fun signingUpSuccess() {
+        progressBar.hide()
+        showToast("Signing up success!")
     }
 
-    override fun onFailure(message: String) {
-        progressBar.visibility=View.GONE
-        clearFields()
+    override fun signingUpFailure(message: String) {
+        progressBar.hide()
         showToast(message)
     }
-    override fun onClick(v: View?) {
-        when(v!!.id){
-            R.id.signUpBtn -> {
-                validateAndSignUp()
-            }
+    private fun setOnClickListeners(){
+        signUpBtn.setOnClickListener{
+            validateAndSignUp()
         }
     }
     private fun validateFields(){
-        emailText.addTextChangedListener {
+        /*emailText.addTextChangedListener {
             validateUsername(emailText)
         }
         passwordText.addTextChangedListener{
@@ -59,7 +61,7 @@ class SignUpFragment : AuthStateAbstractClass(), View.OnClickListener {
         }
         passwordConfirmationText.addTextChangedListener {
             validatePassword(passwordConfirmationText)
-        }
+        }*/
     }
     private fun validateAndSignUp(){
         if(emailText.text.toString().isEmpty()){
@@ -81,7 +83,8 @@ class SignUpFragment : AuthStateAbstractClass(), View.OnClickListener {
             passwordConfirmationText.error="Passwords don't match each other"
             return
         }
-        viewModel.signUp(emailText.text.toString(),passwordText.text.toString())
+        signUpViewModel.signUp(emailText.text.toString(),passwordText.text.toString())
+        clearFields()
     }
     private fun clearFields(){
         emailText.text.clear()

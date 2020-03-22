@@ -1,4 +1,4 @@
-package com.example.bettertogether.ui
+package com.example.bettertogether.ui.history
 
 
 import android.os.Bundle

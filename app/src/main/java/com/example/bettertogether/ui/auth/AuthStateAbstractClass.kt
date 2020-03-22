@@ -4,18 +4,10 @@ import android.util.Patterns
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.navGraphViewModels
-import com.example.bettertogether.R
 import java.util.regex.Pattern
 
-abstract class AuthStateAbstractClass: Fragment(), AuthListener {
-    protected val viewModel: AuthViewModel by navGraphViewModels(R.id.auth_nav_graph)
+abstract class AuthStateAbstractClass: Fragment() {
     protected val navController by lazy { NavHostFragment.findNavController(this) }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.initAuthListener(this)
-    }
 
     protected fun validateUsername(editText: EditText) {
         val pattern = Patterns.EMAIL_ADDRESS

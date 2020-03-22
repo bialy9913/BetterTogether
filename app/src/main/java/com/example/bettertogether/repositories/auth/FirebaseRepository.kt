@@ -8,9 +8,9 @@ import kotlinx.coroutines.tasks.await
 class FirebaseRepository(private val firebaseAuth: FirebaseAuth) {
 
 
-    suspend fun logIn2(
+    suspend fun logIn(
         email:String, password: String,
-        onSuccess: () -> Unit, onFailure: (String) -> Unit) {
+        onSuccess: () -> Unit, onFailure: (String?) -> Unit) {
         firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener {
            if (it.isSuccessful) {
                onSuccess()
@@ -19,43 +19,16 @@ class FirebaseRepository(private val firebaseAuth: FirebaseAuth) {
            }
         }.await()
     }
-
-    suspend fun logIn(email:String, password: String): AuthResponse {
-        val authResponse = AuthResponse(false,null)
-        Log.println(Log.INFO,"FirebaseRepositor/logIn","Starting of logging")
-        try{
-            firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener {
-                if(it.isSuccessful){
-                    authResponse.isSuccessful=true
-                }
-                else{
-                    authResponse.message=it.exception?.message
-                }
-                Log.println(Log.INFO,"Coroutines.Main","End") // TODO wyjebać
-            }.await()
-        }catch(e:Exception){
-            authResponse.message=e.message
-        }
-        return authResponse
-    }
-
-    suspend fun signUp(email: String, password: String): AuthResponse {
-        val authResponse=AuthResponse(false,null)
-        Log.println(Log.INFO,"FirebaseRepositor/logIn","Starting of logging")
-        try{
-            firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener {
-                if(it.isSuccessful){
-                    authResponse.isSuccessful=true
-                }
-                else{
-                    authResponse.message=it.exception?.message
-                }
-                Log.println(Log.INFO,"Coroutines.Main","End")
-            }.await()
-        }catch(e:Exception){
-            authResponse.message=e.message
-        }
-        return authResponse
+    suspend fun signUp(
+        email:String, password: String,
+        onSuccess: () -> Unit, onFailure: (String?) -> Unit) {
+        firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener {
+            if (it.isSuccessful) {
+                onSuccess()
+            } else {
+                onFailure(it.exception?.message.toString())
+            }
+        }.await()
     }
 
     fun logout() = firebaseAuth.signOut()

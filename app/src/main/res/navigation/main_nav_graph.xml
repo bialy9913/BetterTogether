@@ -8,18 +8,18 @@
     </include>
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.bettertogether.ui.HomeFragment"
+        android:name="com.example.bettertogether.ui.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
     </fragment>
     <fragment
         android:id="@+id/myAccountFragment"
-        android:name="com.example.bettertogether.ui.MyAccountFragment"
+        android:name="com.example.bettertogether.ui.my_account.MyAccountFragment"
         android:label="fragment_my_account"
         tools:layout="@layout/fragment_my_account" />
     <fragment
         android:id="@+id/historyFragment"
-        android:name="com.example.bettertogether.ui.HistoryFragment"
+        android:name="com.example.bettertogether.ui.history.HistoryFragment"
         android:label="fragment_history"
         tools:layout="@layout/fragment_history" />
 </navigation>

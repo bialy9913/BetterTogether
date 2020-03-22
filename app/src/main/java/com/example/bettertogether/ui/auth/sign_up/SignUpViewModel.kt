@@ -1,20 +1,20 @@
-package com.example.bettertogether.ui.auth.sign_in
+package com.example.bettertogether.ui.auth.sign_up
 
 import androidx.lifecycle.viewModelScope
 import com.example.bettertogether.repositories.auth.FirebaseRepository
 import com.example.bettertogether.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
 
-class SignInViewModel(
+class SignUpViewModel(
     private val firebaseRepository: FirebaseRepository
-) : BaseViewModel<SignInNavigator>() {
+) : BaseViewModel<SignUpNavigator>() {
 
-    fun logIn(email:String,password:String) {
+    fun signUp(email:String,password:String){
         viewModelScope.launch {
-            firebaseRepository.logIn(email, password, onSuccess = {
-                navigator()?.loggingInSuccess()
+            firebaseRepository.signUp(email, password, onSuccess = {
+                navigator()?.signingUpSuccess()
             }, onFailure = {message ->
-                navigator()?.loggingInFailure(message.toString())
+                navigator()?.signingUpFailure(message.toString())
             })
         }
     }
