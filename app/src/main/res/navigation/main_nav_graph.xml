@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/homeFragment">
+    <include app:graph="@navigation/auth_nav_graph" >
+    </include>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.bettertogether.ui.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+    </fragment>
+    <fragment
+        android:id="@+id/myAccountFragment"
+        android:name="com.example.bettertogether.ui.MyAccountFragment"
+        android:label="fragment_my_account"
+        tools:layout="@layout/fragment_my_account" />
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.example.bettertogether.ui.HistoryFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" />
+</navigation>

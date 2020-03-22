@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "120752057896",
+    "firebase_url": "https://bettertogether-4db49.firebaseio.com",
+    "project_id": "bettertogether-4db49",
+    "storage_bucket": "bettertogether-4db49.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:120752057896:android:643248cfa482c37c7a4f1d",
+        "android_client_info": {
+          "package_name": "com.example.bettertogether"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "120752057896-e27cpdiajob1d6rbj2r0dptsm0sptga4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bettertogether",
+            "certificate_hash": "47e5ab6c4e9208a09d79405ae2c69caef9e68218"
+          }
+        },
+        {
+          "client_id": "120752057896-e01bcvc5hotq4f7ea442d1d7d9rd5ha7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbNYNSNVHfXmqN27mAltgFWqxZZRoEdS8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "120752057896-e01bcvc5hotq4f7ea442d1d7d9rd5ha7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

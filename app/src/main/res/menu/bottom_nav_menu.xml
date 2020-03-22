@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/ic_directions_car_black_24dp"
+        android:title="Home" />
+    <item
+        android:id="@+id/historyFragment"
+        android:icon="@drawable/ic_history_black_24dp"
+        android:title="History" />
+    <item
+        android:id="@+id/myAccountFragment"
+        android:icon="@drawable/ic_account_circle_black_24dp"
+        android:title="MyAccount" />
+</menu>
