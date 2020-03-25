@@ -11,7 +11,11 @@ class SignInViewModel(
 
     fun logIn(email:String,password:String) {
         viewModelScope.launch {
-            firebaseRepository.logIn(email, password, onSuccess = {
+            firebaseRepository.logIn(email, password
+                ,onStarted = {
+                    navigator()?.loggingInStarted()
+                }
+                , onSuccess = {
                 navigator()?.loggingInSuccess()
             }, onFailure = {message ->
                 navigator()?.loggingInFailure(message.toString())

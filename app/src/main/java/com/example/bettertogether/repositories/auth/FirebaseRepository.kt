@@ -1,16 +1,19 @@
 package com.example.bettertogether.repositories.auth
 
-import android.util.Log
-import com.example.bettertogether.data.responses.AuthResponse
+import com.example.bettertogether.repositories.auth.user.UserRepository
+import com.example.bettertogether.repositories.models.User
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.tasks.await
 
-class FirebaseRepository(private val firebaseAuth: FirebaseAuth) {
+class FirebaseRepository(
+    private val firebaseAuth: FirebaseAuth,
+    private val userRepository: UserRepository) {
 
 
     suspend fun logIn(
         email:String, password: String,
-        onSuccess: () -> Unit, onFailure: (String?) -> Unit) {
+        onStarted:()->Unit,onSuccess: () -> Unit, onFailure: (String?) -> Unit) {
+        onStarted()
         firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener {
            if (it.isSuccessful) {
                onSuccess()
@@ -21,10 +24,11 @@ class FirebaseRepository(private val firebaseAuth: FirebaseAuth) {
     }
     suspend fun signUp(
         email:String, password: String,
-        onSuccess: () -> Unit, onFailure: (String?) -> Unit) {
+        onStarted:()->Unit,onSuccess: () -> Unit, onFailure: (String?) -> Unit) {
+        onStarted()
         firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener {
             if (it.isSuccessful) {
-                onSuccess()
+                userRepository.addUser(User(it.result!!.user!!.uid,"Imie"),onSuccess,onFailure)
             } else {
                 onFailure(it.exception?.message.toString())
             }

@@ -11,6 +11,7 @@ import com.example.bettertogether.R
 import com.example.bettertogether.ui.base.BaseFragment
 import com.example.bettertogether.utils.hide
 import com.example.bettertogether.utils.navigateWithoutComingBack
+import com.example.bettertogether.utils.show
 import com.example.bettertogether.utils.showToast
 import kotlinx.android.synthetic.main.fragment_sign_up.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -38,13 +39,19 @@ class SignUpFragment : BaseFragment(),SignUpNavigator {
         validateFields()
         setOnClickListeners()
     }
+
+    override fun signingUpStarted() {
+        progressBar.visibility=View.VISIBLE
+    }
+
     override fun signingUpSuccess() {
-        progressBar.hide()
-        showToast("Signing up success!")
+        progressBar.visibility=View.GONE
+        showToast("Signing up success! Now you can log in")
+        navController.navigateWithoutComingBack(R.id.signUpFragment,R.id.signInFragment)
     }
 
     override fun signingUpFailure(message: String) {
-        progressBar.hide()
+        progressBar.visibility=View.GONE
         showToast(message)
     }
     private fun setOnClickListeners(){

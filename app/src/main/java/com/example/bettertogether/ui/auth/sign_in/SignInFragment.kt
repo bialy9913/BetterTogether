@@ -34,21 +34,17 @@ class SignInFragment : BaseFragment(), SignInNavigator {
         super.onViewCreated(view, savedInstanceState)
         setOnClickListeners()
     }
+    override fun loggingInStarted() {
+        progressBar.visibility=View.VISIBLE
+    }
     override fun loggingInSuccess() {
-        progressBar.hide()
+        progressBar.visibility=View.GONE
         navController.navigateWithoutComingBack(R.id.auth_nav_graph,R.id.main_nav_graph)
     }
 
     override fun loggingInFailure(message:String) {
-        progressBar.hide()
+        progressBar.visibility=View.GONE
         showToast(message)
-    }
-    override fun hideProgressBar() {
-        //progressBar.visibility = View.VISIBLE
-    }
-
-    override fun navigateToHome() {
-        //println("costam")
     }
 
     private fun setOnClickListeners(){ // onClick -> navigator, AndroidDataBinding

@@ -11,7 +11,11 @@ class SignUpViewModel(
 
     fun signUp(email:String,password:String){
         viewModelScope.launch {
-            firebaseRepository.signUp(email, password, onSuccess = {
+            firebaseRepository.signUp(email, password
+                ,onStarted = {
+                    navigator()?.signingUpStarted()
+                }
+                , onSuccess = {
                 navigator()?.signingUpSuccess()
             }, onFailure = {message ->
                 navigator()?.signingUpFailure(message.toString())
