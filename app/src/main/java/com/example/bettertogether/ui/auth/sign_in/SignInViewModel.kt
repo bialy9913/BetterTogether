@@ -1,6 +1,7 @@
 package com.example.bettertogether.ui.auth.sign_in
 
 import androidx.lifecycle.viewModelScope
+import com.example.bettertogether.model.SignInCredentials
 import com.example.bettertogether.repositories.auth.FirebaseRepository
 import com.example.bettertogether.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
@@ -8,17 +9,23 @@ import kotlinx.coroutines.launch
 class SignInViewModel(
     private val firebaseRepository: FirebaseRepository
 ) : BaseViewModel<SignInNavigator>() {
-
-    fun logIn(email:String,password:String) {
+    var signInCredentials = SignInCredentials("","")
+    fun onSignInButtonClick(){
+        logIn()
+    }
+    fun onSignUpTextClick(){
+        navigator()?.navigateToSignUp()
+    }
+    private fun logIn() {
         viewModelScope.launch {
-            firebaseRepository.logIn(email, password
+            firebaseRepository.signIn(signInCredentials
                 ,onStarted = {
-                    navigator()?.loggingInStarted()
+                    navigator()?.signingInStarted()
                 }
                 , onSuccess = {
-                navigator()?.loggingInSuccess()
+                navigator()?.signingInSuccess()
             }, onFailure = {message ->
-                navigator()?.loggingInFailure(message.toString())
+                navigator()?.signingInFailure(message.toString())
             })
         }
     }

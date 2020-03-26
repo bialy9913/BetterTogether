@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.NavHostFragment
 import com.example.bettertogether.R
+import com.example.bettertogether.databinding.FragmentSignInBinding
 import com.example.bettertogether.ui.base.BaseFragment
 import com.example.bettertogether.utils.hide
 import com.example.bettertogether.utils.navigateWithoutComingBack
+import com.example.bettertogether.utils.show
 import kotlinx.android.synthetic.main.fragment_sign_in.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -28,39 +31,37 @@ class SignInFragment : BaseFragment(), SignInNavigator {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sign_in, container, false)
+        val binding: FragmentSignInBinding =
+            DataBindingUtil.inflate(
+                inflater,
+                R.layout.fragment_sign_in, container, false
+            )
+        binding.signInViewModel = signInViewModel
+        return binding.root
     }
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setOnClickListeners()
+    override fun signingInStarted() {
+        clearFields()
+        progressBar.show()
     }
-    override fun loggingInStarted() {
-        progressBar.visibility=View.VISIBLE
-    }
-    override fun loggingInSuccess() {
-        progressBar.visibility=View.GONE
+    override fun signingInSuccess() {
+        progressBar.hide()
         navController.navigateWithoutComingBack(R.id.auth_nav_graph,R.id.main_nav_graph)
     }
 
-    override fun loggingInFailure(message:String) {
-        progressBar.visibility=View.GONE
+    override fun signingInFailure(message:String) {
+        progressBar.hide()
         showToast(message)
     }
 
-    private fun setOnClickListeners(){ // onClick -> navigator, AndroidDataBinding
-        signInBtn.setOnClickListener {
-            signInViewModel.logIn(emailText.text.toString(),passwordText.text.toString())
-            clearFields()
-        }
-        signUpText.setOnClickListener{
-            navController.navigate(R.id.action_signInFragment_to_signUpFragment)
-        }
+    override fun navigateToSignUp() {
+        navController.navigate(R.id.action_signInFragment_to_signUpFragment)
     }
 
     private fun clearFields(){
-        emailText.text.clear()
-        passwordText.text.clear()
-        emailText.error=null
-        passwordText.error=null
+        email.text.clear()
+        password.text.clear()
+        email.error=null
+        password.error=null
+        email.requestFocus()
     }
 }

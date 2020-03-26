@@ -1,31 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="signInViewModel"
+            type="com.example.bettertogether.ui.auth.sign_in.SignInViewModel" />
+    </data>
+
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.auth.sign_in.SignInFragment">
 
     <EditText
-        android:id="@+id/emailText"
+        android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:ems="10"
+        android:hint="E-mail"
+        android:text="@={signInViewModel.signInCredentials.email}"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/passwordText"
+        android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:hint="Password"
+        android:text="@={signInViewModel.signInCredentials.password}"
+        android:inputType="textPersonName|textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailText" />
+        app:layout_constraintTop_toBottomOf="@+id/email" />
 
     <Button
         android:id="@+id/signInBtn"
@@ -33,10 +46,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="44dp"
         android:text="Sign In"
+        android:onClick="@{() -> signInViewModel.onSignInButtonClick()}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordText" />
+        app:layout_constraintTop_toBottomOf="@+id/password" />
 
     <TextView
         android:id="@+id/signUpText"
@@ -45,6 +59,7 @@
         android:background="@color/blue"
         android:gravity="center"
         android:text="Don't have account"
+        android:onClick="@{() -> signInViewModel.onSignUpTextClick()}"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,3 +78,4 @@
         app:layout_constraintTop_toBottomOf="@+id/signInBtn"
         app:layout_constraintVertical_bias="0.163" />
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

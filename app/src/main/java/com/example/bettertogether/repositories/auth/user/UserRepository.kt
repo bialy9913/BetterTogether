@@ -1,6 +1,6 @@
 package com.example.bettertogether.repositories.auth.user
 
-import com.example.bettertogether.repositories.models.User
+import com.example.bettertogether.model.User
 import com.google.firebase.firestore.FirebaseFirestore
 
 class UserRepository(

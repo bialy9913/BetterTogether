@@ -1,4 +1,4 @@
-package com.example.bettertogether.repositories.models
+package com.example.bettertogether.model
 
 data class User(
     var id:String?,
