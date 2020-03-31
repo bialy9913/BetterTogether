@@ -4,14 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.NavHostFragment
 import com.example.bettertogether.R
 import com.example.bettertogether.databinding.FragmentSignInBinding
 import com.example.bettertogether.ui.base.BaseFragment
-import com.example.bettertogether.utils.hide
-import com.example.bettertogether.utils.navigateWithoutComingBack
-import com.example.bettertogether.utils.show
+import com.example.bettertogether.utils.*
 import kotlinx.android.synthetic.main.fragment_sign_in.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -38,6 +37,20 @@ class SignInFragment : BaseFragment(), SignInNavigator {
             )
         binding.signInViewModel = signInViewModel
         return binding.root
+    }
+
+    override fun emailIsNull() {
+        showToast("Please enter email address")
+    }
+
+    override fun passwordIsNull() {
+        showToast("Please enter password")
+    }
+    override fun emailNotValid() {
+        showToast("Please enter valid email address")
+    }
+    override fun passwordNotValid() {
+        showToast("Please enter valid password")
     }
     override fun signingInStarted() {
         clearFields()

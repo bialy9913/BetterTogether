@@ -39,12 +39,6 @@ class SignUpFragment : BaseFragment(),SignUpNavigator {
         binding.signUpViewModel=signUpViewModel
         return binding.root
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        validateFields()
-    }
-
     override fun signingUpStarted() {
         clearFields()
         progressBar.show()
@@ -59,34 +53,6 @@ class SignUpFragment : BaseFragment(),SignUpNavigator {
     override fun signingUpFailure(message: String) {
         progressBar.hide()
         showToast(message)
-    }
-    private fun validateFields(){
-        /*emailText.addTextChangedListener {
-            validateUsername(emailText)
-        }
-        passwordText.addTextChangedListener{
-            validatePassword(passwordText)
-        }
-        passwordConfirmationText.addTextChangedListener {
-            validatePassword(passwordConfirmationText)
-        }*/
-    }
-    private fun validateAndSignUp(){
-        if(email.text.toString().isEmpty()){
-            email.error="Please enter an e-mail"
-            email.requestFocus()
-            return
-        }
-        if(password.text.toString().isEmpty()){
-            password.error="Please enter password"
-            password.requestFocus()
-            return
-        }
-        if(password.text.toString().isEmpty()){
-            password.error="Please enter confirm password"
-            password.requestFocus()
-            return
-        }
     }
     private fun clearFields(){
         email.text.clear()

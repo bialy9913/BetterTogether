@@ -17,7 +17,9 @@ class SignUpViewModel(
 
     private fun signUp(){
         viewModelScope.launch {
-            firebaseRepository.signUp(signUpCredentials
+            firebaseRepository.signUp(
+                signUpCredentials.email
+                ,signUpCredentials.password
                 ,onStarted = {
                     navigator()?.signingUpStarted()
                 }

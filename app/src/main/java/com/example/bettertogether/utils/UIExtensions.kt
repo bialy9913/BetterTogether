@@ -31,22 +31,3 @@ fun ProgressBar.show(){
 fun ProgressBar.hide(){
     this.visibility=View.GONE
 }
-
-fun EditText.validateEmail(){
-    this.error=
-        if (!Patterns.EMAIL_ADDRESS.matcher(this.text.toString()).matches()){
-            "Please enter valid e-mail address"
-        }
-        else
-            null
-}
-
-fun EditText.validatePassword(){
-    val pattern= Pattern.compile(".{6,}")
-    this.error=
-        if (!pattern.matcher(this.text.toString()).matches()){
-            "Password doesn't match our policy"
-        }
-        else
-            null
-}
