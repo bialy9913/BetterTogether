@@ -4,6 +4,6 @@
     <color name="colorPrimaryDark">@color/blue</color>
     <color name="colorAccent">#D81B60</color>
     <color name="toolbar_text">@color/blue</color>
-    <color name="toolbar_back_arrow">@color/blue</color>
+    <color name="toolbar_back_arrow">#000</color>
     <color name="blue">#FF00DDFF</color>
 </resources>

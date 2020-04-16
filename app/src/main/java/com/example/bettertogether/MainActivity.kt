@@ -18,26 +18,19 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        navController.navigateWithoutComingBack(R.id.main_nav_graph,R.id.auth_nav_graph)
+        navController.navigateWithoutComingBack(R.id.auth_nav_graph)
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.parent?.id == R.id.auth_nav_graph)
+            if (destination.parent?.id == R.id.auth_nav_graph
+                || destination.id == R.id.settingsFragment) {
                 bottomNav.visibility = View.GONE
-            else
+            }
+            else {
                 bottomNav.visibility = View.VISIBLE
+            }
         }
         bottomNav.setupWithNavController(navController)
         registerReceiver(networkReceiver, IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"))
     }
-    /*override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.logOut -> {
-
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-
-    }*/
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(networkReceiver)

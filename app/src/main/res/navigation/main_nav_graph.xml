@@ -16,10 +16,19 @@
         android:id="@+id/myAccountFragment"
         android:name="com.example.bettertogether.ui.my_account.MyAccountFragment"
         android:label="fragment_my_account"
-        tools:layout="@layout/fragment_my_account" />
+        tools:layout="@layout/fragment_my_account" >
+        <action
+            android:id="@+id/action_myAccountFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/historyFragment"
         android:name="com.example.bettertogether.ui.history.HistoryFragment"
         android:label="fragment_history"
         tools:layout="@layout/fragment_history" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.bettertogether.ui.settings.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
 </navigation>

@@ -5,14 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.addTextChangedListener
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.NavHostFragment
 import com.example.bettertogether.R
+import com.example.bettertogether.databinding.FragmentSignUpBinding
 import com.example.bettertogether.ui.base.BaseFragment
 import com.example.bettertogether.utils.hide
 import com.example.bettertogether.utils.navigateWithoutComingBack
-import com.example.bettertogether.utils.showToast
-import kotlinx.android.synthetic.main.fragment_sign_up.*
+import com.example.bettertogether.utils.show
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -20,6 +20,7 @@ class SignUpFragment : BaseFragment(),SignUpNavigator {
 
     private val signUpViewModel: SignUpViewModel by viewModel()
     private val navController by lazy { NavHostFragment.findNavController(this) }
+    private lateinit var binding: FragmentSignUpBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         signUpViewModel.setNavigator(this)
@@ -30,68 +31,42 @@ class SignUpFragment : BaseFragment(),SignUpNavigator {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sign_up, container, false)
+        binding =
+            DataBindingUtil.inflate(
+                inflater,
+                R.layout.fragment_sign_up, container, false
+            )
+        binding.signUpViewModel=signUpViewModel
+        return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        validateFields()
-        setOnClickListeners()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.unbind()
     }
+
+    override fun signingUpStarted() {
+        clearFields()
+        binding.progressBar.show()
+    }
+
     override fun signingUpSuccess() {
-        progressBar.hide()
-        showToast("Signing up success!")
+        binding.progressBar.hide()
+        showToast("Signing up success! Now you can log in")
+        navController.navigateWithoutComingBack(R.id.signInFragment)
     }
 
     override fun signingUpFailure(message: String) {
-        progressBar.hide()
+        binding.progressBar.hide()
         showToast(message)
     }
-    private fun setOnClickListeners(){
-        signUpBtn.setOnClickListener{
-            validateAndSignUp()
-        }
-    }
-    private fun validateFields(){
-        /*emailText.addTextChangedListener {
-            validateUsername(emailText)
-        }
-        passwordText.addTextChangedListener{
-            validatePassword(passwordText)
-        }
-        passwordConfirmationText.addTextChangedListener {
-            validatePassword(passwordConfirmationText)
-        }*/
-    }
-    private fun validateAndSignUp(){
-        if(emailText.text.toString().isEmpty()){
-            emailText.error="Please enter an e-mail"
-            emailText.requestFocus()
-            return
-        }
-        if(passwordText.text.toString().isEmpty()){
-            passwordText.error="Please enter password"
-            passwordText.requestFocus()
-            return
-        }
-        if(passwordText.text.toString().isEmpty()){
-            passwordText.error="Please enter confirm password"
-            passwordText.requestFocus()
-            return
-        }
-        if(passwordText.text.toString() != passwordConfirmationText.text.toString()){
-            passwordConfirmationText.error="Passwords don't match each other"
-            return
-        }
-        signUpViewModel.signUp(emailText.text.toString(),passwordText.text.toString())
-        clearFields()
-    }
     private fun clearFields(){
-        emailText.text.clear()
-        passwordText.text.clear()
-        passwordConfirmationText.text.clear()
-        emailText.error=null
-        passwordText.error=null
-        passwordConfirmationText.error=null
+        binding.userName.text?.clear()
+        binding.email.text?.clear()
+        binding.password.text?.clear()
+        binding.userName.error=null
+        binding.email.error=null
+        binding.password.error=null
+        binding.userName.requestFocus()
     }
 }
