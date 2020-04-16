@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.NavHostFragment
 import com.example.bettertogether.R
@@ -15,9 +14,8 @@ import kotlinx.android.synthetic.main.fragment_sign_in.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SignInFragment : BaseFragment(), SignInNavigator {
-
     private val signInViewModel: SignInViewModel by viewModel()
-
+    private lateinit var binding : FragmentSignInBinding
     private val navController by lazy { NavHostFragment.findNavController(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,40 +28,32 @@ class SignInFragment : BaseFragment(), SignInNavigator {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val binding: FragmentSignInBinding =
+        binding =
             DataBindingUtil.inflate(
                 inflater,
                 R.layout.fragment_sign_in, container, false
             )
-        binding.signInViewModel = signInViewModel
+        binding.signInViewModel=signInViewModel
         return binding.root
     }
 
-    override fun emailIsNull() {
-        showToast("Please enter email address")
-    }
-
-    override fun passwordIsNull() {
-        showToast("Please enter password")
-    }
-    override fun emailNotValid() {
-        showToast("Please enter valid email address")
-    }
-    override fun passwordNotValid() {
-        showToast("Please enter valid password")
-    }
     override fun signingInStarted() {
         clearFields()
-        progressBar.show()
+        binding.progressBar.show()
     }
     override fun signingInSuccess() {
-        progressBar.hide()
-        navController.navigateWithoutComingBack(R.id.auth_nav_graph,R.id.main_nav_graph)
+        binding.progressBar.hide()
+        navController.navigateWithoutComingBack(R.id.main_nav_graph)
     }
 
     override fun signingInFailure(message:String) {
-        progressBar.hide()
+        binding.progressBar.hide()
         showToast(message)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.unbind()
     }
 
     override fun navigateToSignUp() {
@@ -71,8 +61,8 @@ class SignInFragment : BaseFragment(), SignInNavigator {
     }
 
     private fun clearFields(){
-        email.text.clear()
-        password.text.clear()
+        email.text?.clear()
+        password.text?.clear()
         email.error=null
         password.error=null
         email.requestFocus()

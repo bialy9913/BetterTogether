@@ -1,6 +1,5 @@
 package com.example.bettertogether.ui.home
 
-
 import android.content.Context
 import android.location.Location
 import android.os.Bundle
@@ -8,41 +7,39 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.NavHostFragment
 import com.example.bettertogether.Constants
 import com.example.bettertogether.R
 import com.example.bettertogether.databinding.FragmentHomeBinding
 import com.example.bettertogether.ui.base.BaseFragment
-import com.example.bettertogether.utils.debug
 import com.example.bettertogether.utils.hide
 import com.example.bettertogether.utils.show
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.tasks.Task
-import kotlinx.android.synthetic.main.fragment_home.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class HomeFragment : BaseFragment(), HomeNavigator, OnMapReadyCallback {
 
     private val homeViewModel : HomeViewModel by viewModel()
+    private val navController by lazy { NavHostFragment.findNavController(this) }
+    private lateinit var binding: FragmentHomeBinding
     private lateinit var googleMap:GoogleMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         homeViewModel.setNavigator(this)
-        homeViewModel.homeFragmentContext=this.context as Context
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val binding: FragmentHomeBinding =
+        binding =
             DataBindingUtil.inflate(
                 inflater,
                 R.layout.fragment_home, container, false
@@ -53,41 +50,44 @@ class HomeFragment : BaseFragment(), HomeNavigator, OnMapReadyCallback {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        mapView.onCreate(savedInstanceState)
-        mapView.onResume()
-        mapView.getMapAsync(this)
+        binding.mapView.onCreate(savedInstanceState)
+        binding.mapView.onResume()
+        binding.mapView.getMapAsync(this)
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.unbind()
+    }
+
     override fun onStarted() {
-        progressBar.show()
-        inputSearch.text.clear()
+        binding.progressBar.show()
+        binding.inputSearch.text?.clear()
     }
 
     override fun onSuccess() {
-        progressBar.hide()
+        binding.progressBar.hide()
     }
 
     override fun onFailure(message:String) {
-        progressBar.hide()
+        binding.progressBar.hide()
         showToast(message)
     }
+    override fun gettingCurrentLocationSuccess(location:Location?) {
+        if(location!=null)
+            moveCamera(LatLng(location!!.latitude,location.longitude),Constants.DEFAULT_CAMERA_ZOOM)
+    }
+
+    override fun gettingCurrentLocationFailure(message: String?) {
+        showToast(message.toString())
+    }
+
     override fun onMapReady(map: GoogleMap) {
         googleMap=map
-        debug("Getting devices current searchLocation")
-        getDeviceLocation()
         googleMap.isMyLocationEnabled=true
+        homeViewModel.getDeviceLocation(this.context as Context)
     }
-    private fun getDeviceLocation(){
-        fusedLocationProviderClient=LocationServices.getFusedLocationProviderClient(this.context as Context)
-        fusedLocationProviderClient.lastLocation.addOnCompleteListener {task ->
-            if(task.isSuccessful){
-                val currentLocation = task.result
-                moveCamera(LatLng(currentLocation!!.latitude,currentLocation.longitude),Constants.DEFAULT_CAMERA_ZOOM)
-            }
-            else{
-                showToast("Niestety blad")
-            }
-        }
-    }
+
     private fun moveCamera(latLng: LatLng, zoom:Float){
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom))
     }

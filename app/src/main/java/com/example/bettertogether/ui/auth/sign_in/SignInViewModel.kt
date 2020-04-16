@@ -1,48 +1,69 @@
 package com.example.bettertogether.ui.auth.sign_in
 
+import android.util.Patterns
 import androidx.lifecycle.viewModelScope
-import com.example.bettertogether.model.SignInCredentials
-import com.example.bettertogether.repositories.auth.FirebaseRepository
+import com.example.bettertogether.repositories.AuthRepository
+import com.example.bettertogether.model.ValidateEmail
+import com.example.bettertogether.model.ValidatePassword
 import com.example.bettertogether.ui.base.BaseViewModel
 import com.example.bettertogether.utils.info
-import com.example.bettertogether.utils.validateEmail
-import com.example.bettertogether.utils.validatePassword
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SignInViewModel(
-    private val firebaseRepository: FirebaseRepository
+    private val authRepository: AuthRepository
 ) : BaseViewModel<SignInNavigator>() {
-    var signInCredentials = SignInCredentials("","")
+    var validateEmail = ValidateEmail("", false)
+    var validatePassword = ValidatePassword("",false)
 
+    //E-mail address validation
+    fun validateEmailAddress(s:CharSequence){
+        if(s.isEmpty()){
+            validateEmail.isValid=false
+            validateEmail.setError(null)
+        }
+        else{
+            if(Patterns.EMAIL_ADDRESS.matcher(s.toString()).matches()){
+                validateEmail.isValid=true
+                validateEmail.setError(null)
+
+            }
+            else{
+                validateEmail.isValid=false
+                validateEmail.setError("E-mail address is not valid")
+            }
+        }
+    }
+    fun validatePassword(s:CharSequence){
+        if(s.isEmpty()){
+            validatePassword.isValid=false
+            validatePassword.setError(null)
+        }
+        else{
+            if(com.example.bettertogether.utils.validatePassword(s.toString())){
+                validatePassword.isValid=true
+                validatePassword.setError(null)
+            }
+            else{
+                validatePassword.isValid=false
+                validatePassword.setError("Password must have at least 6 characters")
+            }
+        }
+    }
     fun onSignInButtonClick(){
-        if(signInCredentials.email.isEmpty()){
-            navigator()?.emailIsNull()
-            return
+        if(validateEmail.isValid && validatePassword.isValid){
+            logIn()
         }
-        if(signInCredentials.password.isEmpty()){
-            navigator()?.passwordIsNull()
-            return
-        }
-        if(!validateEmail(signInCredentials.email)){
-            navigator()?.emailNotValid()
-            return
-        }
-        if(!validatePassword(signInCredentials.password)){
-            navigator()?.passwordNotValid()
-            return
-        }
-        logIn()
     }
     fun onSignUpTextClick(){
         navigator()?.navigateToSignUp()
     }
     private fun logIn() {
-        info("jestem "+viewModelScope.isActive)
         viewModelScope.launch(Dispatchers.Main) {
             info("here")
-            firebaseRepository.signIn(
-                signInCredentials.email
-                ,signInCredentials.password
+            authRepository.signIn(
+                validateEmail.email
+                ,validatePassword.password
                 ,onStarted = {
                     navigator()?.signingInStarted()
                 }

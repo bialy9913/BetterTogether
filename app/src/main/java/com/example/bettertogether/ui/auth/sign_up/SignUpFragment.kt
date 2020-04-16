@@ -13,7 +13,6 @@ import com.example.bettertogether.ui.base.BaseFragment
 import com.example.bettertogether.utils.hide
 import com.example.bettertogether.utils.navigateWithoutComingBack
 import com.example.bettertogether.utils.show
-import kotlinx.android.synthetic.main.fragment_sign_up.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -21,6 +20,7 @@ class SignUpFragment : BaseFragment(),SignUpNavigator {
 
     private val signUpViewModel: SignUpViewModel by viewModel()
     private val navController by lazy { NavHostFragment.findNavController(this) }
+    private lateinit var binding: FragmentSignUpBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         signUpViewModel.setNavigator(this)
@@ -31,7 +31,7 @@ class SignUpFragment : BaseFragment(),SignUpNavigator {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val binding: FragmentSignUpBinding =
+        binding =
             DataBindingUtil.inflate(
                 inflater,
                 R.layout.fragment_sign_up, container, false
@@ -39,26 +39,34 @@ class SignUpFragment : BaseFragment(),SignUpNavigator {
         binding.signUpViewModel=signUpViewModel
         return binding.root
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.unbind()
+    }
+
     override fun signingUpStarted() {
         clearFields()
-        progressBar.show()
+        binding.progressBar.show()
     }
 
     override fun signingUpSuccess() {
-        progressBar.hide()
+        binding.progressBar.hide()
         showToast("Signing up success! Now you can log in")
-        navController.navigateWithoutComingBack(R.id.signUpFragment,R.id.signInFragment)
+        navController.navigateWithoutComingBack(R.id.signInFragment)
     }
 
     override fun signingUpFailure(message: String) {
-        progressBar.hide()
+        binding.progressBar.hide()
         showToast(message)
     }
     private fun clearFields(){
-        email.text.clear()
-        password.text.clear()
-        email.error=null
-        password.error=null
-        email.requestFocus()
+        binding.userName.text?.clear()
+        binding.email.text?.clear()
+        binding.password.text?.clear()
+        binding.userName.error=null
+        binding.email.error=null
+        binding.password.error=null
+        binding.userName.requestFocus()
     }
 }
