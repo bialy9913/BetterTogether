@@ -1,6 +1,7 @@
 package com.example.bettertogether.repositories
 
-import com.example.bettertogether.model.User
+import com.example.bettertogether.models.User
+import com.example.bettertogether.utils.debug
 import com.example.bettertogether.utils.info
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.EmailAuthProvider
@@ -35,6 +36,7 @@ class AuthRepository(
             onFailure(e.message)
         }
     }
+
     suspend fun signUp(
         email:String,
         password:String,
@@ -46,11 +48,6 @@ class AuthRepository(
         try{
             firebaseAuth.createUserWithEmailAndPassword(email,password)
                 .addOnSuccessListener {
-                    userRepository.addUser(
-                        User(
-                            userName,
-                            500.toString()
-                        ),onSuccess,onFailure)
                 }
                 .addOnFailureListener {
                     onFailure(it.message)
@@ -59,6 +56,11 @@ class AuthRepository(
         }catch(e:Exception){
             onFailure(e.message)
         }
+        userRepository.addUser(
+            User(
+                userName,
+                500.toString()
+            ),onSuccess,onFailure)
     }
 
     suspend fun changePassword(

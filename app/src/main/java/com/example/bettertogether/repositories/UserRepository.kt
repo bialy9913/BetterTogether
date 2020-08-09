@@ -1,6 +1,6 @@
 package com.example.bettertogether.repositories
 
-import com.example.bettertogether.model.User
+import com.example.bettertogether.models.User
 import com.example.bettertogether.utils.info
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -10,7 +10,7 @@ class UserRepository(
     private val firebaseAuth: FirebaseAuth,
     private val firestore: FirebaseFirestore
 ) {
-    fun addUser(user: User, onSuccess: () -> Unit, onFailure: (String?) -> Unit){
+    suspend fun addUser(user: User, onSuccess: () -> Unit, onFailure: (String?) -> Unit){
         val dataToAdd = hashMapOf(Pair("name",user.name), Pair("maxDestinationDistance",user.maxDestinationDistance))
         firestore
             .collection("users")
@@ -22,7 +22,7 @@ class UserRepository(
             }
             .addOnFailureListener {
                 onFailure(it.message)
-            }
+            }.await()
     }
 
     suspend fun getMaxDistance(

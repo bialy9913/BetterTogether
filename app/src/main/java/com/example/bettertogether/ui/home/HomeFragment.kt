@@ -19,6 +19,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -61,21 +62,19 @@ class HomeFragment : BaseFragment(), HomeNavigator, OnMapReadyCallback {
     }
 
     override fun onStarted() {
-        binding.progressBar.show()
-        binding.inputSearch.text?.clear()
+        binding.inputSearchS.text?.clear()
     }
 
-    override fun onSuccess() {
-        binding.progressBar.hide()
+    override fun onSuccess(latLng: LatLng) {
+        moveCamera(latLng,Constants.DEFAULT_CAMERA_ZOOM,null)
     }
 
     override fun onFailure(message:String) {
-        binding.progressBar.hide()
         showToast(message)
     }
     override fun gettingCurrentLocationSuccess(location:Location?) {
         if(location!=null)
-            moveCamera(LatLng(location!!.latitude,location.longitude),Constants.DEFAULT_CAMERA_ZOOM)
+            moveCamera(LatLng(location!!.latitude,location.longitude),Constants.DEFAULT_CAMERA_ZOOM,"My Location")
     }
 
     override fun gettingCurrentLocationFailure(message: String?) {
@@ -88,7 +87,18 @@ class HomeFragment : BaseFragment(), HomeNavigator, OnMapReadyCallback {
         homeViewModel.getDeviceLocation(this.context as Context)
     }
 
-    private fun moveCamera(latLng: LatLng, zoom:Float){
+    private fun moveCamera(latLng: LatLng, zoom:Float,title:String?){
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom))
+
+        if(title!="My Location"){
+            val options = MarkerOptions()
+                .position(latLng)
+                .title(null)
+            googleMap.addMarker(options)
+        }
+    }
+
+    override fun onSearchClick() {
+        navController.navigate(R.id.action_homeFragment_to_offersFragment)
     }
 }

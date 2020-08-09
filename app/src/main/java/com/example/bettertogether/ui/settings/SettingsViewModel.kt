@@ -2,7 +2,7 @@ package com.example.bettertogether.ui.settings
 
 import androidx.databinding.ObservableField
 import androidx.lifecycle.viewModelScope
-import com.example.bettertogether.model.ValidatePassword
+import com.example.bettertogether.models.ValidatePassword
 import com.example.bettertogether.repositories.AuthRepository
 import com.example.bettertogether.repositories.UserRepository
 import com.example.bettertogether.ui.base.BaseViewModel
@@ -16,6 +16,7 @@ class SettingsViewModel(
     var validateOldPassword = ValidatePassword("",false)
     var validateNewPassword = ValidatePassword("",false)
     var seekBarValue = ObservableField("")
+    var lastMaxDistance:String=""
 
     fun setSeekBarValueChange(progress:Int){
         seekBarValue.set(progress.toString())
@@ -58,12 +59,20 @@ class SettingsViewModel(
 
     fun changeMaxDistance(){
         viewModelScope.launch {
-            userRepository.changeMaxDistance(
-                seekBarValue.get().toString(),
-                onStarted = {navigator()?.onChangeMaxDistanceStarted()},
-                onSuccess = {navigator()?.onChangeMaxDistanceSuccess()},
-                onFailure = {message -> navigator()?.onChangeMaxDistanceFailure(message.toString())}
-            )
+            if(lastMaxDistance==seekBarValue.get().toString()){
+                navigator()?.onChangeMaxDistanceFailure("Nothing to change")
+            }
+            if(lastMaxDistance!=seekBarValue.get().toString()){
+                userRepository.changeMaxDistance(
+                    seekBarValue.get().toString(),
+                    onStarted = {navigator()?.onChangeMaxDistanceStarted()},
+                    onSuccess = {
+                        lastMaxDistance=seekBarValue.get().toString()
+                        navigator()?.onChangeMaxDistanceSuccess()
+                    },
+                    onFailure = {message -> navigator()?.onChangeMaxDistanceFailure(message.toString())}
+                )
+            }
         }
     }
 
@@ -93,7 +102,10 @@ class SettingsViewModel(
         viewModelScope.launch {
             userRepository.getMaxDistance(
                 onStarted = {navigator()?.onGetMaxDistanceStarted()},
-                onSuccess = {maxDistance ->  navigator()?.onGetMaxDistanceSuccess(maxDistance)},
+                onSuccess = {
+                    lastMaxDistance=it
+                    navigator()?.onGetMaxDistanceSuccess(it)
+                },
                 onFailure = {message -> navigator()?.onGetMaxDistanceFailure(message)}
             )
         }

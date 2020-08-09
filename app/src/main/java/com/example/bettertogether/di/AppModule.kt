@@ -6,6 +6,9 @@ import com.example.bettertogether.ui.auth.sign_in.SignInViewModel
 import com.example.bettertogether.ui.auth.sign_up.SignUpViewModel
 import com.example.bettertogether.ui.home.HomeViewModel
 import com.example.bettertogether.ui.my_account.MyAccountViewModel
+import com.example.bettertogether.ui.new_offer.NewOffer
+import com.example.bettertogether.ui.new_offer.NewOfferViewModel
+import com.example.bettertogether.ui.offers.OffersViewModel
 import com.example.bettertogether.ui.settings.SettingsViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
@@ -25,4 +28,6 @@ val appModule = module {
     viewModel { HomeViewModel()}
     viewModel { MyAccountViewModel(get())}
     viewModel { SettingsViewModel(get(),get())}
+    viewModel { OffersViewModel()}
+    viewModel { NewOfferViewModel()}
 }
