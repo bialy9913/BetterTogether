@@ -10,6 +10,7 @@ import com.example.bettertogether.ui.base.BaseViewModel
 import com.example.bettertogether.utils.info
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -17,6 +18,11 @@ import kotlin.collections.ArrayList
 
 class HomeViewModel : BaseViewModel<HomeNavigator>(){
     var searchLocation:String=""
+    var searchLocationE:String=""
+
+    fun onSearchButtonClick(){
+        navigator()?.onSearchClick()
+    }
 
     fun getDeviceLocation(context:Context){
         val fusedLocationProviderClient= LocationServices.getFusedLocationProviderClient(context)
@@ -42,7 +48,7 @@ class HomeViewModel : BaseViewModel<HomeNavigator>(){
                 list = geocoder.getFromLocationName(searchLocationCopy,1)
                 if(list.isNotEmpty()){
                     info("Found a location: "+list[0].toString())
-                    navigator()?.onSuccess()
+                    navigator()?.onSuccess(LatLng(list[0].latitude,list[0].longitude))
                 }
                 else{
                     navigator()?.onFailure("No results found")

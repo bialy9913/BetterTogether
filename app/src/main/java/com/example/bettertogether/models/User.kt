@@ -1,4 +1,4 @@
-package com.example.bettertogether.model
+package com.example.bettertogether.models
 
 data class User(
     var name:String?,

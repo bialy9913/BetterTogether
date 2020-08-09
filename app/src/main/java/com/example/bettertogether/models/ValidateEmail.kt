@@ -1,4 +1,4 @@
-package com.example.bettertogether.model
+package com.example.bettertogether.models
 
 import androidx.databinding.ObservableField
 

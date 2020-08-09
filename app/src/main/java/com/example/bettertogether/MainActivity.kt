@@ -21,7 +21,8 @@ class MainActivity : AppCompatActivity() {
         navController.navigateWithoutComingBack(R.id.auth_nav_graph)
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.parent?.id == R.id.auth_nav_graph
-                || destination.id == R.id.settingsFragment) {
+                || destination.id == R.id.settingsFragment
+                || destination.id == R.id.offersFragment) {
                 bottomNav.visibility = View.GONE
             }
             else {

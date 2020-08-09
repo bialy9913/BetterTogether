@@ -2,8 +2,8 @@ package com.example.bettertogether.ui.auth.sign_up
 
 import android.util.Patterns
 import androidx.lifecycle.viewModelScope
-import com.example.bettertogether.model.ValidateEmail
-import com.example.bettertogether.model.ValidatePassword
+import com.example.bettertogether.models.ValidateEmail
+import com.example.bettertogether.models.ValidatePassword
 import com.example.bettertogether.repositories.AuthRepository
 import com.example.bettertogether.ui.base.BaseViewModel
 import kotlinx.coroutines.launch

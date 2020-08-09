@@ -6,6 +6,10 @@
         android:icon="@drawable/ic_home_blue_24dp"
         android:title="Home" />
     <item
+        android:id="@+id/newOfferFragment"
+        android:icon="@drawable/ic_add_circle_black_24dp"
+        android:title="Add a new offer" />
+    <item
         android:id="@+id/historyFragment"
         android:icon="@drawable/ic_history_black_24dp"
         android:title="History" />

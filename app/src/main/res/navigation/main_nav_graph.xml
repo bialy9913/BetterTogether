@@ -11,6 +11,9 @@
         android:name="com.example.bettertogether.ui.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_offersFragment"
+            app:destination="@id/offersFragment" />
     </fragment>
     <fragment
         android:id="@+id/myAccountFragment"
@@ -31,4 +34,12 @@
         android:name="com.example.bettertogether.ui.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/offersFragment"
+        android:name="com.example.bettertogether.ui.offers.OffersFragment"
+        android:label="OffersFragment" />
+    <fragment
+        android:id="@+id/newOfferFragment"
+        android:name="com.example.bettertogether.ui.new_offer.NewOffer"
+        android:label="fragment_new_offer" />
 </navigation>
