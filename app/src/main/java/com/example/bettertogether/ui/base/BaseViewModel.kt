@@ -1,6 +1,7 @@
 package com.example.bettertogether.ui.base
 
 import androidx.lifecycle.ViewModel
+import java.lang.ref.Reference
 import java.lang.ref.WeakReference
 
 abstract class BaseViewModel<N>: ViewModel() {

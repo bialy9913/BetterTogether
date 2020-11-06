@@ -1,8 +1,6 @@
 package com.example.bettertogether.ui.new_offer
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,13 +9,12 @@ import androidx.navigation.fragment.NavHostFragment
 
 import com.example.bettertogether.R
 import com.example.bettertogether.databinding.FragmentNewOfferBinding
-import com.example.bettertogether.databinding.FragmentOffersBinding
 import com.example.bettertogether.ui.base.BaseFragment
-import com.example.bettertogether.ui.offers.OffersViewModel
-import kotlinx.android.synthetic.main.fragment_new_offer.*
+import com.example.bettertogether.utils.hide
+import com.example.bettertogether.utils.show
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class NewOffer : BaseFragment(),NewOfferNavigator {
+class NewOfferFragment : BaseFragment(),NewOfferNavigator {
 
     private val newOfferViewModel: NewOfferViewModel by viewModel()
     private lateinit var binding : FragmentNewOfferBinding
@@ -43,23 +40,27 @@ class NewOffer : BaseFragment(),NewOfferNavigator {
     }
 
     override fun addNewOfferStarted() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        binding.pbNewOffer.show()
     }
 
     override fun addNewOfferSuccess() {
+        binding.pbNewOffer.hide()
         showToast("Entire Success")
         clearFields()
     }
 
     override fun addNewOfferFailure(message: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        binding.pbNewOffer.hide()
+        showToast(message!!)
     }
 
-    fun clearFields(){
+    private fun clearFields(){
         binding.tietStartPoint.text?.clear()
         binding.tietEndPoint.text?.clear()
         binding.etNewOfferPrice.text?.clear()
         binding.tietStartPoint.requestFocus()
+        binding.etSeatNumber.text.clear()
+        binding.etAdditionalComment.text.clear()
     }
 
 }

@@ -3,7 +3,9 @@ package com.example.bettertogether.ui.my_account
 
 import android.os.Bundle
 import android.view.*
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bettertogether.R
 import com.example.bettertogether.ui.base.BaseFragment
 import com.example.bettertogether.utils.navigateWithoutComingBack
@@ -33,8 +35,42 @@ class MyAccountFragment : BaseFragment(),MyAccountNavigator {
         setOnClickListeners()
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        myAccountViewModel.getCurrOffers()
+        myAccountViewModel.offers.observe(viewLifecycleOwner, Observer { offers ->
+            rvCurrOffers.also {
+                it.layoutManager = LinearLayoutManager(requireContext())
+                it.setHasFixedSize(true)
+                it.adapter =
+                    CurrOffersAdapter(offers, myAccountViewModel)
+            }
+        })
+    }
+
     override fun navigateToAuth() {
         navController.navigateWithoutComingBack(R.id.auth_nav_graph)
+    }
+
+    override fun fetchingCurrOffersStarted() {
+    }
+
+    override fun fetchingCurrOffersSuccess(currOfferNumber: Int) {
+    }
+
+    override fun fetchingCurrOffersFailure(message: String?) {
+        showToast(message!!)
+    }
+
+    override fun cancelRideStarted() {
+    }
+
+    override fun cancelRideSuccess() {
+        this.parentFragmentManager.beginTransaction().detach(this).attach(this).commit()
+    }
+
+    override fun cancelRideFailure(message: String?) {
+        showToast(message!!)
     }
 
     private fun setOnClickListeners(){

@@ -1,4 +1,4 @@
-package com.example.bettertogether.models
+package com.example.bettertogether.ui.offers
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,11 +6,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bettertogether.R
 import com.example.bettertogether.databinding.RecyclerviewOffersBinding
-import com.example.bettertogether.ui.offers.OffersNavigator
+import com.example.bettertogether.models.Offer
 
 class OffersAdapter(
     private val offers:List<Offer>
-    ,private val listener:OffersNavigator
+    ,private val listener:OffersViewModel
 ):RecyclerView.Adapter<OffersAdapter.OffersViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = OffersViewHolder(
         DataBindingUtil.inflate(
@@ -26,7 +26,7 @@ class OffersAdapter(
     override fun onBindViewHolder(holder: OffersViewHolder, position: Int) {
         holder.recycleViewOffersBinding.offer= offers[position]
         holder.recycleViewOffersBinding.btnChooseOffer.setOnClickListener{
-            listener.userChoosedOffer(offers[position])
+            listener.userChosedOffer(offers[position])
         }
     }
 

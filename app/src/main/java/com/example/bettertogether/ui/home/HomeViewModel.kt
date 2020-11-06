@@ -24,6 +24,10 @@ class HomeViewModel : BaseViewModel<HomeNavigator>(){
         navigator()?.onSearchClick()
     }
 
+    fun onChangeDirectionClick(){
+        navigator()?.onChangeDirectionClick()
+    }
+
     fun getDeviceLocation(context:Context){
         val fusedLocationProviderClient= LocationServices.getFusedLocationProviderClient(context)
         viewModelScope.launch(Dispatchers.IO) {

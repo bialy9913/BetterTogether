@@ -11,4 +11,5 @@ interface HomeNavigator : BaseNavigator{
     fun gettingCurrentLocationSuccess(location:Location?)
     fun gettingCurrentLocationFailure(message:String?)
     fun onSearchClick()
+    fun onChangeDirectionClick()
 }

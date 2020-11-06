@@ -5,6 +5,7 @@ import android.util.Patterns
 import android.view.View
 import android.widget.EditText
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -38,5 +39,13 @@ fun ConstraintLayout.show(){
 }
 
 fun ConstraintLayout.hide(){
+    this.visibility=View.GONE
+}
+
+fun TextView.show(){
+    this.visibility=View.VISIBLE
+}
+
+fun TextView.hide(){
     this.visibility=View.GONE
 }

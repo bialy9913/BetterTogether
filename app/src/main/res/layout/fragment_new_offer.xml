@@ -7,14 +7,17 @@
             name="newOfferViewModel"
             type="com.example.bettertogether.ui.new_offer.NewOfferViewModel" />
     </data>
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayoutNewOffer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/tvHeader"
@@ -42,7 +45,8 @@
                     android:layout_height="match_parent"
                     android:hint="Start point"
                     android:inputType="none"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:text="@={newOfferViewModel.offer.startPoint}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -60,7 +64,8 @@
                     android:layout_height="match_parent"
                     android:hint="End point"
                     android:inputType="none"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:text="@={newOfferViewModel.offer.endPoint}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <EditText
@@ -71,21 +76,67 @@
                 android:ems="10"
                 android:hint="Ride price"
                 android:inputType="number"
+                android:text="@={newOfferViewModel.offer.ridePrice}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tilEndPoint" />
+
+            <ProgressBar
+                android:id="@+id/pbNewOffer"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnAddOffer" />
+
+            <EditText
+                android:id="@+id/etSeatNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Car seat number"
+                android:inputType="numberSigned"
+                android:text="@={newOfferViewModel.offer.seatNumber}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dpRideDate" />
+
+            <DatePicker
+                android:id="@+id/dpRideDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner"
+                android:day="@={newOfferViewModel.day}"
+                android:month="@={newOfferViewModel.month-1}"
+                android:year="@={newOfferViewModel.year}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etNewOfferPrice" />
+
+            <EditText
+                android:id="@+id/etAdditionalComment"
+                style="@style/Base.Widget.MaterialComponents.TextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Additional comment"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etSeatNumber" />
 
             <Button
                 android:id="@+id/btnAddOffer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:background="#00DDFF"
                 android:onClick="@{() -> newOfferViewModel.addNewOfferOnClick()}"
                 android:text="Add a new offer"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etNewOfferPrice" />
+                app:layout_constraintTop_toBottomOf="@+id/etAdditionalComment" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

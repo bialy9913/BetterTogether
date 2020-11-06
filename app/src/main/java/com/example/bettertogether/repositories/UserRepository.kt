@@ -25,6 +25,24 @@ class UserRepository(
             }.await()
     }
 
+    suspend fun getUserName():String{
+        var userName=""
+        firestore
+            .collection("users")
+            .document(firebaseAuth.currentUser!!.uid)
+            .get()
+            .addOnCompleteListener {
+                if(it.isSuccessful){
+                    userName = it.result!!.get("name").toString()
+                }
+                else{
+                    //onFailure(it.exception?.message)
+                }
+            }
+            .await()
+        return userName
+    }
+
     suspend fun getMaxDistance(
         onStarted: () -> Unit,
         onSuccess: (maxDistance:String) -> Unit,

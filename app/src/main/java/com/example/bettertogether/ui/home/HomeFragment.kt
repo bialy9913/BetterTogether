@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.NavHostFragment
 import com.example.bettertogether.Constants
@@ -72,6 +73,23 @@ class HomeFragment : BaseFragment(), HomeNavigator, OnMapReadyCallback {
     override fun onFailure(message:String) {
         showToast(message)
     }
+
+    override fun onChangeDirectionClick() {
+        val tmp = binding.inputSearchS.text
+        binding.inputSearchS.text=binding.inputSearchE.text
+        binding.inputSearchE.text=tmp
+
+    }
+
+    override fun onSearchClick() {
+        val bundle = bundleOf(
+            "startPoint" to binding.inputSearchS.text.toString()
+            ,"endPoint" to binding.inputSearchE.text.toString()
+        )
+        clearFields()
+        navController.navigate(R.id.action_homeFragment_to_offersFragment,bundle)
+    }
+
     override fun gettingCurrentLocationSuccess(location:Location?) {
         if(location!=null)
             moveCamera(LatLng(location!!.latitude,location.longitude),Constants.DEFAULT_CAMERA_ZOOM,"My Location")
@@ -97,8 +115,8 @@ class HomeFragment : BaseFragment(), HomeNavigator, OnMapReadyCallback {
             googleMap.addMarker(options)
         }
     }
-
-    override fun onSearchClick() {
-        navController.navigate(R.id.action_homeFragment_to_offersFragment)
+    private fun clearFields(){
+        binding.inputSearchS.text.clear()
+        binding.inputSearchE.text.clear()
     }
 }

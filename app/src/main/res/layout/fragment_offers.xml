@@ -10,11 +10,40 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_offers"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:listitem="@layout/recyclerview_offers"
-            android:id="@+id/recycler_view_offers">
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/recyclerview_offers">
+
         </androidx.recyclerview.widget.RecyclerView>
+
+        <ProgressBar
+            android:id="@+id/pbOffers"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvOffers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:text="No results found"
+            android:textSize="50sp"
+            android:visibility="gone" />
     </RelativeLayout>
 </layout>
