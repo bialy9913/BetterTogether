@@ -6,4 +6,5 @@ interface SignUpNavigator : BaseNavigator {
     fun signingUpStarted()
     fun signingUpSuccess()
     fun signingUpFailure(message:String)
+    fun onDefaultStartPointClick()
 }

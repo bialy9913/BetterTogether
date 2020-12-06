@@ -6,6 +6,7 @@ import com.example.bettertogether.models.ValidatePassword
 import com.example.bettertogether.repositories.AuthRepository
 import com.example.bettertogether.repositories.UserRepository
 import com.example.bettertogether.ui.base.BaseViewModel
+import com.example.bettertogether.utils.info
 import com.example.bettertogether.utils.validatePassword
 import kotlinx.coroutines.launch
 
@@ -17,6 +18,11 @@ class SettingsViewModel(
     var validateNewPassword = ValidatePassword("",false)
     var seekBarValue = ObservableField("")
     var lastMaxDistance:String=""
+    var newStartPoint = ObservableField<String>()
+    var newStartPointLat: Double=0.0
+    var newStartPointLng: Double=0.0
+    private var lastStartPoint=""
+
 
     fun setSeekBarValueChange(progress:Int){
         seekBarValue.set(progress.toString())
@@ -101,12 +107,58 @@ class SettingsViewModel(
     fun getMaxDistance(){
         viewModelScope.launch {
             userRepository.getMaxDistance(
-                onStarted = {navigator()?.onGetMaxDistanceStarted()},
+                onStarted = {navigator()?.onGetDefaultSettingsStarted()},
                 onSuccess = {
                     lastMaxDistance=it
-                    navigator()?.onGetMaxDistanceSuccess(it)
+                    getStartPoint()
                 },
-                onFailure = {message -> navigator()?.onGetMaxDistanceFailure(message)}
+                onFailure = {message -> navigator()?.onGetDefaultSettingsFailure(message)}
+            )
+        }
+    }
+    private fun getStartPoint(){
+        var defaultStartPoint:List<String> = listOf()
+        viewModelScope.launch {
+            userRepository.getDefaultStartPoint(
+                onStarted = {},
+                onSuccess = {defaultStartPointParam ->
+                    defaultStartPoint=defaultStartPointParam.split(";")
+                    lastStartPoint = if(!defaultStartPoint.isNullOrEmpty() && !defaultStartPoint[0].isNullOrEmpty()){
+                        defaultStartPoint[0]
+                    } else{
+                        "No default start point set"
+                    }
+                    newStartPoint.set(lastStartPoint)
+                    newStartPoint.notifyChange()
+                    navigator()?.onGetDefaultSettingsSuccess(lastMaxDistance)
+                },
+                onFailure = {message ->
+                    navigator()?.onGetDefaultSettingsFailure(message)}
+            )
+            info("lastStartPoint: $lastStartPoint")
+        }
+    }
+    fun onDefaultStartPointClick(){
+        navigator()?.onDefaultStartPointClick()
+    }
+    fun changeDefaultStartPoint(){
+        if(lastStartPoint==newStartPoint.get()){
+            navigator()?.onChangeDefaultStartPointFailure("Nothing to change")
+            return
+        }
+        viewModelScope.launch {
+            userRepository.changeDefaultStartPoint(
+                newStartPoint.get()!!,
+                newStartPointLat,
+                newStartPointLng,
+                onStarted = {navigator()?.onChangeDefaultStartPointStarted()},
+                onSuccess = {
+                    lastStartPoint=newStartPoint.get()!!
+                    navigator()?.onChangeDefaultStartPointSuccess()
+                },
+                onFailure = {message ->
+                    navigator()?.onChangeDefaultStartPointFailure(message.toString())
+                }
             )
         }
     }

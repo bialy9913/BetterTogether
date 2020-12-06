@@ -1,21 +1,54 @@
 package com.example.bettertogether.repositories
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.example.bettertogether.models.CurrOffer
 import com.example.bettertogether.models.Offer
+import com.example.bettertogether.utils.convertToStringDate
 import com.example.bettertogether.utils.info
 import com.example.bettertogether.utils.removePassengerFromList
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import java.time.LocalDate
 
 class CurrentOffersRepository(
     private val firebaseAuth: FirebaseAuth,
     private val firestore: FirebaseFirestore,
     private val userRepository: UserRepository
 ) {
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun moveOffersToHistory(){
+        var stringDate = convertToStringDate(
+            LocalDate.now().dayOfMonth,
+            LocalDate.now().monthValue,
+            LocalDate.now().year)
+        val offers = ArrayList<String>()
+        firestore
+            .collection("currOffers")
+            .get()
+            .addOnSuccessListener {documents ->
+                documents.forEach{document ->
+                    info("teraz sprawdzam czy sa jakies przestarzale")
+                    if(document.get("UID")==firebaseAuth.currentUser!!.uid
+                        && document.get("rideDate")!=stringDate
+                        && document.get("status")=="IN PROGRESS"){
+                        offers.add(document.id)
+                    }
+                }
+                info("Przestarzalych: "+offers.size)
+                for(d:String in offers){
+                    firestore.collection("currOffers").document(d).update("status","END")
+                }
+            }
+            .addOnFailureListener {exception ->
 
+            }
+            .await()
+    }
     suspend fun addOffer(currOffer: CurrOffer, onStarted: () -> Unit, onSuccess:() -> Unit, onFailure:(String?) -> Unit){
         onStarted()
         val dataToAdd = hashMapOf(

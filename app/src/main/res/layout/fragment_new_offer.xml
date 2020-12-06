@@ -30,43 +30,29 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilStartPoint"
+            <TextView
+                android:id="@+id/tietStartPoint"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvHeader">
+                android:layout_height="50dp"
+                android:hint="Start point"
+                android:inputType="none"
+                android:onClick="@{() -> newOfferViewModel.onStartPointOnClick()}"
+                android:singleLine="true"
+                android:text="@={newOfferViewModel.startPoint}"
+                android:textSize="18sp"
+                app:layout_constraintTop_toBottomOf="@+id/tvHeader" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tietStartPoint"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Start point"
-                    android:inputType="none"
-                    android:singleLine="true"
-                    android:text="@={newOfferViewModel.offer.startPoint}" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilEndPoint"
+            <TextView
+                android:id="@+id/tietEndPoint"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tilStartPoint">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tietEndPoint"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="End point"
-                    android:inputType="none"
-                    android:singleLine="true"
-                    android:text="@={newOfferViewModel.offer.endPoint}" />
-            </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="50dp"
+                android:hint="End point"
+                android:inputType="none"
+                android:onClick="@{() -> newOfferViewModel.onEndPointOnClick()}"
+                android:singleLine="true"
+                android:text="@={newOfferViewModel.endPoint}"
+                android:textSize="18sp"
+                app:layout_constraintTop_toBottomOf="@+id/tietStartPoint" />
 
             <EditText
                 android:id="@+id/etNewOfferPrice"
@@ -78,7 +64,7 @@
                 android:inputType="number"
                 android:text="@={newOfferViewModel.offer.ridePrice}"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tilEndPoint" />
+                app:layout_constraintTop_toBottomOf="@+id/tietEndPoint" />
 
             <ProgressBar
                 android:id="@+id/pbNewOffer"

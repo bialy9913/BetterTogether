@@ -12,6 +12,7 @@ import com.example.bettertogether.R
 import com.example.bettertogether.databinding.FragmentOffersBinding
 import com.example.bettertogether.ui.base.BaseFragment
 import com.example.bettertogether.utils.hide
+import com.example.bettertogether.utils.info
 import com.example.bettertogether.utils.show
 import kotlinx.android.synthetic.main.fragment_offers.*
 import kotlinx.android.synthetic.main.recyclerview_offers.*
@@ -22,14 +23,22 @@ class OffersFragment: BaseFragment(),OffersNavigator {
     private val offersViewModel: OffersViewModel by viewModel()
     private lateinit var binding : FragmentOffersBinding
     private val navController by lazy { NavHostFragment.findNavController(this) }
-    private lateinit var startPoint:String
-    private lateinit var endPoint:String
+    private var startPointLat: Double = 0.0
+    private var startPointLng: Double = 0.0
+    private var endPointLat: Double = 0.0
+    private var endPointLng: Double = 0.0
+    private var rideDate = ""
+    private var maxDistance=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         offersViewModel.setNavigator(this)
-        startPoint = arguments!!.getString("startPoint")!!
-        endPoint = arguments!!.getString("endPoint")!!
+        startPointLat = arguments!!.getDouble("startPointLat")
+        startPointLng = arguments!!.getDouble("startPointLng")
+        endPointLat = arguments!!.getDouble("endPointLat")
+        endPointLng = arguments!!.getDouble("endPointLng")
+        rideDate = arguments!!.getString("rideDate")!!
+        maxDistance = arguments!!.getString("maxDistance")!!
     }
 
     override fun onCreateView(
@@ -48,7 +57,7 @@ class OffersFragment: BaseFragment(),OffersNavigator {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        offersViewModel.getOffers(startPoint,endPoint)
+        offersViewModel.getOffers(startPointLat,startPointLng,endPointLat,endPointLng,rideDate,maxDistance)
         offersViewModel.offers.observe(viewLifecycleOwner, Observer { offers ->
             recycler_view_offers.also {
                 it.layoutManager = LinearLayoutManager(requireContext())

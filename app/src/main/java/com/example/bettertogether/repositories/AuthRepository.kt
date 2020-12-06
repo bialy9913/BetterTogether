@@ -1,5 +1,6 @@
 package com.example.bettertogether.repositories
 
+import com.example.bettertogether.models.SignUpCredentials
 import com.example.bettertogether.models.User
 import com.example.bettertogether.utils.debug
 import com.example.bettertogether.utils.info
@@ -38,15 +39,13 @@ class AuthRepository(
     }
 
     suspend fun signUp(
-        email:String,
-        password:String,
-        userName:String,
-        onStarted:()->Unit
+        signUpCredentials: SignUpCredentials
+        ,onStarted:()->Unit
         ,onSuccess: () -> Unit
         ,onFailure: (String?) -> Unit) {
         onStarted()
         try{
-            firebaseAuth.createUserWithEmailAndPassword(email,password)
+            firebaseAuth.createUserWithEmailAndPassword(signUpCredentials.email,signUpCredentials.password)
                 .addOnSuccessListener {
                 }
                 .addOnFailureListener {
@@ -58,8 +57,12 @@ class AuthRepository(
         }
         userRepository.addUser(
             User(
-                userName,
-                500.toString()
+                signUpCredentials.userName,
+                500.toString(),
+                signUpCredentials.defaultStartPoint,
+                signUpCredentials.defaultStartPointLat,
+                signUpCredentials.defaultStartPointLng
+
             ),onSuccess,onFailure)
     }
 

@@ -1,7 +1,9 @@
 package com.example.bettertogether.ui.auth.sign_up
 
 import android.util.Patterns
+import androidx.databinding.ObservableField
 import androidx.lifecycle.viewModelScope
+import com.example.bettertogether.models.SignUpCredentials
 import com.example.bettertogether.models.ValidateEmail
 import com.example.bettertogether.models.ValidatePassword
 import com.example.bettertogether.repositories.AuthRepository
@@ -14,6 +16,9 @@ class SignUpViewModel(
     var validateEmail = ValidateEmail("",false)
     var validatePassword = ValidatePassword("",false)
     var userName:String=""
+    var defaultStartPoint = ObservableField<String>()
+    var defaultStartPointLat:Double=0.0
+    var defaultStartPointLng:Double=0.0
 
     //E-mail address and password validation
     fun validateEmailAddress(s:CharSequence){
@@ -50,6 +55,10 @@ class SignUpViewModel(
         }
     }
 
+    fun onDefaultStartPointClick(){
+        navigator()?.onDefaultStartPointClick()
+    }
+
     fun onSignUpButtonClick(){
         if(validateEmail.isValid && validatePassword.isValid && userName.isNotEmpty()){
             signUp()
@@ -59,9 +68,7 @@ class SignUpViewModel(
     private fun signUp(){
         viewModelScope.launch {
             authRepository.signUp(
-                validateEmail.email
-                ,validatePassword.password
-                ,userName
+                SignUpCredentials(validateEmail.email,validatePassword.password,userName,defaultStartPoint.get(),defaultStartPointLat,defaultStartPointLng)
                 ,onStarted = {
                     navigator()?.signingUpStarted()
                 }

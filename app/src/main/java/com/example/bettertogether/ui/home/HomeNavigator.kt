@@ -5,11 +5,15 @@ import com.example.bettertogether.ui.base.BaseNavigator
 import com.google.android.gms.maps.model.LatLng
 
 interface HomeNavigator : BaseNavigator{
-    fun onStarted()
+    /*fun onStarted()
     fun onSuccess(latLng: LatLng)
-    fun onFailure(message:String)
+    fun onFailure(message:String)*/
     fun gettingCurrentLocationSuccess(location:Location?)
     fun gettingCurrentLocationFailure(message:String?)
-    fun onSearchClick()
+    fun onSearchStarted()
+    fun onSearchSuccess(maxDistance:String)
+    fun onSearchFailure(message:String?)
     fun onChangeDirectionClick()
+    fun onInputSearchClick()
+    fun onInputSearchEClick()
 }

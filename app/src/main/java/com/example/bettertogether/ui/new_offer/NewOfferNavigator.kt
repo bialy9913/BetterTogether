@@ -6,4 +6,6 @@ interface NewOfferNavigator:BaseNavigator {
     fun addNewOfferStarted()
     fun addNewOfferSuccess()
     fun addNewOfferFailure(message: String?)
+    fun onStartPointOnClick()
+    fun onEndPointOnClick()
 }

@@ -23,10 +23,11 @@
             android:layout_alignParentBottom="true"
             android:layout_marginStart="0dp"
             android:layout_marginLeft="0dp"
-            android:layout_marginTop="213dp"
+            android:layout_marginTop="310dp"
             android:layout_marginEnd="0dp"
             android:layout_marginRight="0dp"
-            android:layout_marginBottom="0dp">
+            android:layout_marginBottom="0dp"
+            android:visibility="gone">
 
             <com.google.android.gms.maps.MapView
                 android:id="@+id/mapView"
@@ -51,14 +52,16 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_starting_point" />
 
-            <EditText
+            <TextView
                 android:id="@+id/inputSearchS"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
                 android:hint="Enter Address, City or Zip Code"
-                android:inputType="text"
+                android:onClick="@{() -> homeViewModel.onInputSearchClick()}"
                 android:singleLine="true"
                 android:text="@={homeViewModel.searchLocation}"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/startingPointImage"
@@ -82,14 +85,16 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_end_point" />
 
-            <EditText
+            <TextView
                 android:id="@+id/inputSearchE"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
                 android:hint="Enter Address, City or Zip Code"
-                android:inputType="text"
+                android:onClick="@{() -> homeViewModel.onInputSearchEClick()}"
                 android:singleLine="true"
                 android:text="@={homeViewModel.searchLocationE}"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/imageButton"
                 app:layout_constraintStart_toEndOf="@+id/imageView2"
@@ -114,18 +119,50 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/contraintLayoutInputE">
 
+            <CheckBox
+                android:id="@+id/cbSearchWithRadius"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Search using max distance from location"
+                android:checked="@={homeViewModel.searchWithMaxDistance}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <DatePicker
+                android:id="@+id/dpRideDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner"
+                android:day="@={homeViewModel.day}"
+                android:month="@={homeViewModel.month-1}"
+                android:year="@={homeViewModel.year}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cbSearchWithRadius" />
+
             <Button
                 android:id="@+id/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#00DDFF"
-                android:text="Search"
                 android:onClick="@{() -> homeViewModel.onSearchButtonClick()}"
+                android:text="Search"
                 android:textColor="#FFFFFF"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/dpRideDate" />
+
+            <ProgressBar
+                android:id="@+id/pbSearch"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </RelativeLayout>

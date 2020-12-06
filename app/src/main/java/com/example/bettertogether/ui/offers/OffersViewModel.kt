@@ -1,5 +1,7 @@
 package com.example.bettertogether.ui.offers
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -12,6 +14,7 @@ import com.example.bettertogether.ui.base.BaseViewModel
 import com.example.bettertogether.utils.info
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 class OffersViewModel(
     private val firebaseAuth: FirebaseAuth
@@ -23,12 +26,16 @@ class OffersViewModel(
     val offers : LiveData<List<Offer>>
         get() = moffers
 
-    fun getOffers(startPoint:String,endPoint:String){
+    fun getOffers(startPointLat: Double,startPointLng: Double,endPointLat: Double,endPointLng: Double,rideDate: String,maxDistance:String){
+        info("maxDistance: $maxDistance")
         viewModelScope.launch {
             moffers.value=offerRepository.getOffers(
-                startPoint
-                ,endPoint
-                ,""
+                startPointLat
+                ,startPointLng
+                ,endPointLat
+                ,endPointLng
+                ,rideDate
+                ,maxDistance
                 ,onStarted = {
                     navigator()?.fetchingOffersStarted()
                 }
